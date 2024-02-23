@@ -1,0 +1,16 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: contour
+  namespace: package-installs
+  annotations:
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: security-label-overlay-secret
+spec:
+  packageRef:
+    refName: contour.tanzu.vmware.com
+    versionSelection:
+      constraints: 1.23.5+vmware.1-tkg.1
+  serviceAccountName: package-install-sa
+  values:
+  - secretRef:
+      name: contour-data-values

@@ -1,0 +1,16 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: harbor-cert
+  namespace: tanzu-continuousdelivery-resources
+spec:
+  dependsOn:
+    - name: cluster-group-bootstrap-resources
+    - name: cert-manager
+    - name: harbor
+  interval: 5m
+  path: "./clusters/platform/harbor"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: platform-gitops-cluster-level

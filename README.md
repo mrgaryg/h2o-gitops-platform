@@ -1,0 +1,1 @@
+gitops platform static configurations

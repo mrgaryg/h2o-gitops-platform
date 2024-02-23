@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: security-label-overlay-secret
+  namespace: package-installs
+stringData:
+  add-ns-label.yml: |
+    #@ load("@ytt:overlay", "overlay")
+    #@overlay/match by=overlay.subset({"kind":"Namespace"}),expects="1+"
+    ---
+    metadata:
+      #@overlay/match missing_ok=True
+      labels:
+        #@overlay/match missing_ok=True
+        pod-security.kubernetes.io/enforce: privileged

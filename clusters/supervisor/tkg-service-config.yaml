@@ -1,0 +1,13 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:base64", "base64")
+---
+apiVersion: run.tanzu.vmware.com/v1alpha1
+kind: TkgServiceConfiguration
+metadata:
+  name: tkg-service-configuration
+spec:
+  defaultCNI: antrea
+  trust:
+    additionalTrustedCAs:
+      - name: vault-ca
+        data: #@ base64.encode(data.values.harbor.platform.tls.ca)

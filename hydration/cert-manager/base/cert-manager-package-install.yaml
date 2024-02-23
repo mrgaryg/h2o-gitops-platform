@@ -1,0 +1,13 @@
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageInstall
+metadata:
+  name: cert-manager
+  namespace: package-installs
+  annotations:
+    ext.packaging.carvel.dev/ytt-paths-from-secret-name.0: security-label-overlay-secret
+spec:
+  packageRef:
+    refName: cert-manager.tanzu.vmware.com
+    versionSelection:
+      constraints: 1.7.2+vmware.3-tkg.3
+  serviceAccountName: package-install-sa
