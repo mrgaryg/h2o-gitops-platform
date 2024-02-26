@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-data-values
+  namespace: package-installs
+type: Opaque
+stringData:
+  values.yml: |-
+    core:
+      secret: VMware1!
+      xsrfKey: VMware1!VMware1!VMware1!VMware1!
+    database:
+      password: VMware1!
+    enableContourHttpProxy: true
+    harborAdminPassword: VMware1!
+    hostname: harbor.h2o-4-22388.h2o.vmware.com
+    jobservice:
+      secret: VMware1!
+    namespace: tanzu-system-registry
+    notary:
+      enabled: true
+    persistence:
+      persistentVolumeClaim:
+        registry:
+          size: 100Gi
+          storageClass: vc01cl01-t0compute
+        jobservice:
+          jobLog:
+            storageClass: vc01cl01-t0compute
+        database:
+          storageClass: vc01cl01-t0compute
+        redis:
+          storageClass: vc01cl01-t0compute
+        trivy:
+          storageClass: vc01cl01-t0compute
+    port:
+      https: 443
+    registry:
+      secret: VMware1!
+    secretKey: VMware1!VMware1!
+    tlsCertificateSecretName: harbor-cert
