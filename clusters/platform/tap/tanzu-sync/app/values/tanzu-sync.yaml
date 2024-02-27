@@ -1,0 +1,6 @@
+git:
+  ref: origin/main
+  url: https://github.com/mrgaryg/h2o-gitops-platform
+  sub_path: clusters/platform/tap/cluster-config
+tap_package_repository:
+  oci_repository: registry.tanzu.vmware.com/tanzu-application-platform/tap-packages

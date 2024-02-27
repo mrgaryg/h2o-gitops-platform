@@ -1,0 +1,105 @@
+tap_install:
+  values:
+    excluded_packages:
+    - fluxcd.source.controller.tanzu.vmware.com
+    - cert-manager.tanzu.vmware.com
+    - contour.tanzu.vmware.com
+    shared:
+      ca_cert_data: |-
+        -----BEGIN CERTIFICATE-----
+        MIIDZDCCAkygAwIBAgIUJccwIS9iYkjb/TIjCp7huYSeVj4wDQYJKoZIhvcNAQEL
+        BQAwJTEjMCEGA1UEAxMaaDJvLTQtMjIzODguaDJvLnZtd2FyZS5jb20wHhcNMjQw
+        MjIyMDA0MzMzWhcNMzQwMjE5MDA0NDAzWjAlMSMwIQYDVQQDExpoMm8tNC0yMjM4
+        OC5oMm8udm13YXJlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+        AMaiT7dKhsld3f8zbsoQkBgw+Dz3ML3U37kL1GxiDSbn3aZBb71In703rw2czOmL
+        xe9oXmFq6v81i1/2HIUX5iHUYSh/UaSFA7+KU9j1E2nF0FxwivRQQCgVDOtqZeL9
+        J22GpkP91jXRVjo5Gc36pOXIXczzv/bRlO/PuhiGdUlKVtOtWInpiQi2WeVkOdj/
+        PeQzke//Cr68WqG4XOP2z3RglPbn0K88Ws0YHkEdgB2wF26YFZDcuyoqvQFsr2lD
+        dKmvcAwCpTUBBi9MpLAx3UFrMTwDMAIZhKoOpG9DxKXIjW9d/MXF6xCN9yIgEqrx
+        Wa5AHj9dM+0xgazZnApuF2UCAwEAAaOBizCBiDAOBgNVHQ8BAf8EBAMCAQYwDwYD
+        VR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUB7x3WBWxF7yefuxsVa7CpM21F38wHwYD
+        VR0jBBgwFoAUB7x3WBWxF7yefuxsVa7CpM21F38wJQYDVR0RBB4wHIIaaDJvLTQt
+        MjIzODguaDJvLnZtd2FyZS5jb20wDQYJKoZIhvcNAQELBQADggEBAEKxOJxvBErt
+        OzyVJ1E6UfwZAvnLSO8PI8NKaxqEBthoQUs2L4fhk9z3vC/NpD7upFZMKwdou82i
+        FiWd7iXnmqT9fp4dYCRAIhp1Jlnz/emEqnPLWQbwwjEuQoSqFGWB3XPCu9orxzul
+        FhAYyKDrOpYaaaXSeJQaumOoEzZ94MB4iHjPe+W3yD1Sd16RN5xZx/GehNM/6vU0
+        Bb431+fIibn7Co+kxRWvJkxl2qu1budTu1LUlQ0XRnYWcrGdY96rptGwKElzMo6E
+        e9JrE/JLom3RXClafauY6NYM8AxQG74lt+wT7BSbNPflY8i6r8D8IwR8GWCjXAsr
+        FlnIzdIFF2A=
+        -----END CERTIFICATE-----
+      ingress_domain: tap.h2o-4-22388.h2o.vmware.com
+      ingress_issuer: vault-cluster-issuer
+    ceip_policy_disclosed: true
+    profile: full
+    supply_chain: basic
+    ootb_supply_chain_basic:
+      registry:
+        server: harbor.h2o-4-22388.h2o.vmware.com
+        repository: tap/workloads
+      gitops:
+        ssh_secret: workload-git-auth
+    contour:
+      envoy:
+        service:
+          type: LoadBalancer
+    buildservice:
+      kp_default_repository: harbor.h2o-4-22388.h2o.vmware.com/tap/buildservice
+    tap_gui:
+      service_type: ClusterIP
+      metadataStoreAutoconfiguration: true
+      app_config:
+        auth:
+          environment: development
+          providers: {}
+          allowGuestAccess: true
+        catalog:
+          locations:
+          - type: url
+            target: https://dev.azure.com/kirkware/h2o-lab/_git/software-catalog?path=/catalog-info.yaml
+    metadata_store:
+      ns_for_export_app_cert: '*'
+      app_service_type: ClusterIP
+    policy:
+      tuf_enabled: false
+    cnrs:
+      domain_template: '{{.Name}}-{{.Namespace}}.{{.Domain}}'
+    api_portal:
+      apiPortalServer:
+        sourceUrls: https://petstore.swagger.io/v2/swagger.json,http://scg-openapi-service.spring-cloud-gateway.svc.cluster.local/openapi
+        trustInsecureSourceUrls: true
+        sourceUrlsCacheTtlSec: "30"
+        sourceUrlsTimeoutSec: "30"
+    local_source_proxy:
+      repository: harbor.h2o-4-22388.h2o.vmware.com/tap/tap-source-proxy
+      push_secret:
+        name: lsp-push-credentials
+        namespace: tap-install
+        create_export: true
+    namespace_provisioner:
+      controller: false
+      gitops_install:
+        ref: origin/main
+        subPath: clusters/platform/tap/cluster-config/namespaces
+        url: https://github.com/mrgaryg//_git/h2o-gitops-platform
+        secretRef:
+          name: git-auth
+          namespace: tap-install
+          create_export: true
+      additional_sources:
+      - git:
+          ref: origin/main
+          subPath: clusters/platform/tap/cluster-config/namespaces/namespace-resources
+          url: https://github.com/mrgaryg//_git/h2o-gitops-platform
+          secretRef:
+            name: git-auth-install
+            namespace: tap-install
+            create_export: true
+        path: _ytt_lib/namespace-resources
+      default_parameters:
+        supply_chain_service_account:
+          secrets:
+          - workload-git-auth
+    package_overlays:
+    - name: api-portal
+      secrets:
+      - name: api-portal-cm-tls-overlay-secret

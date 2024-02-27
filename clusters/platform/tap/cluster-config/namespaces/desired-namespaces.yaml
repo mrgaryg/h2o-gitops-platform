@@ -1,0 +1,9 @@
+#@data/values
+---
+namespaces:
+- name: dev
+- name: canary
+- name: dotnet-todos
+- name: spring-petclinic
+- name: where-for-dinner
+- name: java-rest-service

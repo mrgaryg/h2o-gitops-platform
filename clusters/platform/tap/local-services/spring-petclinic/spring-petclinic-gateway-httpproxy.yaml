@@ -1,0 +1,16 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: spring-petclinic-gateway
+  namespace: spring-petclinic
+spec:
+  routes:
+  - conditions:
+    - prefix: /
+    services:
+    - name: spring-petclinic-gateway
+      port: 80
+  virtualhost:
+    fqdn: petclinic.platform.h2o-4-22388.h2o.vmware.com
+    tls:
+      secretName: spring-petclinic-gateway-tls-cert
