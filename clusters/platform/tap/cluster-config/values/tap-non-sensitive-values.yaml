@@ -80,7 +80,7 @@ tap_install:
       gitops_install:
         ref: origin/main
         subPath: clusters/platform/tap/cluster-config/namespaces
-        url: https://github.com/mrgaryg//_git/h2o-gitops-platform
+        url: https://github.com/mrgaryg/h2o-gitops-platform
         secretRef:
           name: git-auth
           namespace: tap-install
@@ -89,7 +89,7 @@ tap_install:
       - git:
           ref: origin/main
           subPath: clusters/platform/tap/cluster-config/namespaces/namespace-resources
-          url: https://github.com/mrgaryg//_git/h2o-gitops-platform
+          url: https://github.com/mrgaryg/h2o-gitops-platform
           secretRef:
             name: git-auth-install
             namespace: tap-install
