@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: vault-cluster-issuer
+spec:
+  vault:
+    path: pki_int/sign/h2o-4-22388-dot-h2o-dot-vmware-dot-com
+    server: http://vault.h2o-4-22388.h2o.vmware.com:8200
+    auth:
+      kubernetes:
+        mountPath: /v1/auth/client-2-east
+        role: issuer
+        secretRef:
+          name: cert-manager-vault-token
+          key: token
